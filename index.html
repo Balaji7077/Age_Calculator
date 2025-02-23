@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Age Calculator</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background-color: #e3f2fd;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .container:hover {
+            transform: scale(1.05);
+        }
+        input, button {
+            margin: 10px;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #90caf9;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #1976d2;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #1565c0;
+        }
+        h2 {
+            color: #0d47a1;
+        }
+        h3 {
+            color: #424242;
+            margin-top: 15px;
+        }
+    </style>
+    <script>
+        function updateAge() {
+            const birthYear = parseInt(document.getElementById("birthYear").value);
+            const birthMonth = parseInt(document.getElementById("birthMonth").value);
+            const birthDay = parseInt(document.getElementById("birthDay").value);
+            
+            if (!birthYear || !birthMonth || !birthDay) return;
+            
+            const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+            const currentDate = new Date();
+            
+            let ageYears = currentDate.getFullYear() - birthDate.getFullYear();
+            let ageMonths = currentDate.getMonth() - birthDate.getMonth();
+            let ageDays = currentDate.getDate() - birthDate.getDate();
+            
+            if (ageDays < 0) {
+                ageMonths -= 1;
+                const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+                ageDays += lastMonth.getDate();
+            }
+            
+            if (ageMonths < 0) {
+                ageYears -= 1;
+                ageMonths += 12;
+            }
+            
+            const totalSeconds = Math.floor((currentDate - birthDate) / 1000);
+            const totalHours = Math.floor(totalSeconds / 3600);
+            const liveHours = currentDate.getHours();
+            const liveMinutes = currentDate.getMinutes();
+            const liveSeconds = currentDate.getSeconds();
+            
+            document.getElementById("ageOutput").innerHTML = `You are <b>${ageYears}</b> years, <b>${ageMonths}</b> months, and <b>${ageDays}</b> days old.`;
+            document.getElementById("timeOutput").innerHTML = `Total Hours: <b>${totalHours}</b> | Hours Today: <b>${liveHours}</b> | Minutes: <b>${liveMinutes}</b> | Seconds: <b>${liveSeconds}</b>`;
+        }
+        
+        setInterval(updateAge, 1000);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Live Age Calculator</h2>
+        <label>Birth Year: <input type="number" id="birthYear" placeholder="YYYY"></label>
+        <label>Birth Month: <input type="number" id="birthMonth" placeholder="MM"></label>
+        <label>Birth Day: <input type="number" id="birthDay" placeholder="DD"></label>
+        <button onclick="updateAge()">Start</button>
+        <h3 id="ageOutput"></h3>
+        <h3 id="timeOutput"></h3>
+    </div>
+</body>
+</html>
